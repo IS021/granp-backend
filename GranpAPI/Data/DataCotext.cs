@@ -1,4 +1,4 @@
-using Granp.Domain.Entities;
+using Granp.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Granp.Data
