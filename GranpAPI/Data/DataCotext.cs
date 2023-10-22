@@ -1,12 +1,12 @@
-using Granp.Data.Entities;
+using Granp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Granp.Data
 {
-    public class ApiDbContext : DbContext
+    public class DataContext : DbContext
     {
 
-        public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Professional> Professionals { get; set; }
         public DbSet<ProfessionalReview> ProfessionalReviews { get; set; }
