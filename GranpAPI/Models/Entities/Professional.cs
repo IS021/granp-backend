@@ -11,6 +11,10 @@ namespace Granp.Models.Entities
         public string? Description { get; set; }
         public Profession Profession { get; set; }
         public Address Address { get; set; } = null!;
+        public DateTime BirthDate { get; set; }
+
+        // Get age from birthdate (make it more precise)
+        public int Age => DateTime.Now.Year - BirthDate.Year;
         
         // Reviews (these are common to both Customer and Professional) -> Rateable User ?
         public ICollection<CustomerReview>? WrittenReviews { get; set; }
@@ -22,7 +26,7 @@ namespace Granp.Models.Entities
         public TimeTable TimeTable { get; set; } = new TimeTable();
         public double HourlyRate { get; set; }
         public int MaxDistance { get; set; }
-        public int MaxWeeksInAdvance { get; set; }
+        public int WeeksInAdvance { get; set; }
         public bool LongTimeJob { get; set; }
         public bool ShortTimeJob { get; set; }
 

@@ -10,6 +10,10 @@ namespace Granp.Models.Entities
         public string ElderFirstName { get; set; } = null!;
         public string ElderLastName { get; set; } = null!;
         public Address ElderAddress { get; set; } = null!;
+        public DateTime ElderBirthDate { get; set; }
+        
+        // Get age from birthdate (make it more precise)
+        public int ElderAge => DateTime.Now.Year - ElderBirthDate.Year;
         public string? ElderPhoneNumber { get; set; }
         public string? ElderDescription { get; set; }
 
