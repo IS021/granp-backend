@@ -6,7 +6,7 @@ namespace Granp.Models.Types
     {
         public Location Location { get; set; } = null!;
         public Profession? Profession { get; set; }
-        public TimeSlot? TimeSlot { get; set; }
+        public List<TimeSlot>? TimeSlots { get; set; }
         public double? MaxHourlyRate { get; set; }
         public bool? LongTimeJob { get; set; }
         public bool? ShortTimeJob { get; set; }

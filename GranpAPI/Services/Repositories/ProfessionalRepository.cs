@@ -49,11 +49,11 @@ namespace Granp.Services.Repositories
                 query = query.Where(p => p.Profession == filter.Profession.Value);
             }
 
-            // TODO: Build Logic for TimeSlot comparison
-            // if (filter.TimeSlot.HasValue)
-            // {
-            //     query = query.Where(p => p.TimeSlot == filter.TimeSlot.Value);
-            // }
+            // TODO: Build Better Logic for TimeSlot comparison
+            if (filter.TimeSlots != null)
+            {
+                query = query.Where(p => p.TimeTable.Overlap(filter.TimeSlots) >= 0.9);
+            }
 
             if (filter.MaxHourlyRate.HasValue)
             {
@@ -89,6 +89,9 @@ namespace Granp.Services.Repositories
             {
                 query = query.Where(p => p.Age <= filter.MaxAge.Value);
             }
+
+            // TODO: Add pagination
+            // TODO: Add sorting
 
             // Execute the query and return the results
             return await query.ToListAsync();
