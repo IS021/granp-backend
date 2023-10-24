@@ -1,10 +1,56 @@
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
 using Granp.Data;
 using Granp.Services.Repositories.Interfaces;
 using Granp.Services.Repositories;
+using Granp.Middlewares;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Kesrel
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.AddServerHeader = false;
+});
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        // Allow any origin for testing purposes.
+        policy.WithOrigins(
+            "capacitor://localhost",
+            "http://localhost"
+        )
+            .WithHeaders(new string[] {
+                HeaderNames.ContentType,
+                HeaderNames.Authorization,
+            })
+            .WithMethods("GET")
+            .SetPreflightMaxAge(TimeSpan.FromSeconds(86400));
+    });
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var audience = builder.Configuration["Authentication:Audience"];
+
+        options.Authority = builder.Configuration["Authentication:Domain"];
+        options.Audience = audience;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true
+        };
+    });
 
 // Add EF DB Context
 builder.Services.AddDbContext<DataContext>(options =>
@@ -26,18 +72,72 @@ builder.Services.AddControllers();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1",
+            new OpenApiInfo
+            {
+                Title = "API",
+                Version = "v1",
+                Description = "A REST API",
+                TermsOfService = new Uri("https://lmgtfy.com/?q=i+like+pie")
+            });
+
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows
+        {
+            Implicit = new OpenApiOAuthFlow
+            {
+                Scopes = new Dictionary<string, string>
+                {
+                    { "openid", "Open Id" }
+                },
+                AuthorizationUrl = new Uri(builder.Configuration["Authentication:Domain"] + "authorize?audience=" + builder.Configuration["Authentication:Audience"])
+            }
+        }
+    });
+
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 var app = builder.Build();
+
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
+        c.OAuthClientId(builder.Configuration["Authentication:ClientId"]);
+        c.OAuth2RedirectUrl("http://localhost:5255/swagger/oauth2-redirect.html");
+    });
 }
 
+// app.UseErrorHandler();
+app.UseSecureHeaders();
 app.UseCors();
-app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

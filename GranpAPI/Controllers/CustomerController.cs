@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using AutoMapper;
+
 using Granp.Models.Entities;
 using Granp.Services.Repositories.Interfaces;
 using Granp.DTOs;
@@ -13,14 +16,17 @@ namespace Granp.Controllers
         public CustomerController(ILogger<CustomerController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
         // Create a new customer
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> CreateCustomer(CustomerRequest customerRequest) // 
         {
             if (ModelState.IsValid)
             {
+                // Get User Id from the authentication token
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 // Map the request to a customer entity
-                var customer = _mapper.Map<Customer>(customerRequest);
-                
+                var customer = _mapper.Map<Customer>(customerRequest, opts => opts.Items["UserId"] = userId);
+
                 await _unitOfWork.Customers.Add(customer); // add the customer to the database
                 await _unitOfWork.CompleteAsync(); // save the changes to the database
 
