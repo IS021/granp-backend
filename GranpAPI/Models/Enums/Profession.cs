@@ -6,9 +6,7 @@ namespace Granp.Models.Enums
         Doctor,
         Nurse,
         Physiotherapist,
-        Psychologist,
-        SocialWorker,
         Caregiver,
         Other
-    }
+     }
 }
