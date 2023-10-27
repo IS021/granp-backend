@@ -1,6 +1,6 @@
 namespace Granp.Models.Enums
 {
-  public enum WeekDays 
+  public enum WeekDays
   {
     Monday,
     Tuesday, 
