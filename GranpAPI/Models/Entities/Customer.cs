@@ -6,6 +6,8 @@ namespace Granp.Models.Entities
 {
     public class Customer : BaseUser
     {
+        public bool IsElder { get; set; }
+        
         // Elder Info
         public string ElderFirstName { get; set; } = null!;
         public string ElderLastName { get; set; } = null!;
@@ -20,8 +22,8 @@ namespace Granp.Models.Entities
         // Reviews (these are common to both Customer and Professional) -> Rateable User ?
         public ICollection<ProfessionalReview>? WrittenReviews { get; set; }
         public ICollection<CustomerReview>? ReceivedReviews { get; set; }
-        public int NumberOfReviews { get; set; }
-        public float? Rating { get; set; }
+        public int ReviewsNumber { get; set; }
+        public double? Rating { get; set; }
 
     }
 }

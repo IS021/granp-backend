@@ -19,6 +19,9 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.AddServerHeader = false;
 });
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -117,9 +120,12 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+
 var app = builder.Build();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

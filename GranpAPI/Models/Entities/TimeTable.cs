@@ -1,10 +1,11 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using Granp.Models.Common;
 
 namespace Granp.Models.Types
 {
     // Should rapresent a week time table
-    public class TimeTable
+    public class TimeTable : BaseEntity
     {
+        public int WeeksInAdvance { get; set; }
         public List<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
 
         // Overlap percentage between this timetable and a list of timeslots
@@ -47,7 +48,7 @@ namespace Granp.Models.Types
         // Overlap condition
         private bool TimeSlotsOverlap(TimeSlot a, TimeSlot b)
         {
-            return a.StartTime < b.EndTime && a.EndTime > b.StartTime && a.DayOfWeek == b.DayOfWeek;
+            return a.StartTime < b.EndTime && a.EndTime > b.StartTime && a.WeekDay == b.WeekDay;
         }
 
         // Overlap time between two timeslots
