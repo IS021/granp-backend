@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,8 +15,8 @@ namespace GranpAPI.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsElder = table.Column<bool>(type: "boolean", nullable: false),
                     ElderFirstName = table.Column<string>(type: "text", nullable: false),
                     ElderLastName = table.Column<string>(type: "text", nullable: false),
                     ElderAddress_Street = table.Column<string>(type: "text", nullable: false),
@@ -29,13 +28,14 @@ namespace GranpAPI.Migrations
                     ElderBirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ElderPhoneNumber = table.Column<string>(type: "text", nullable: true),
                     ElderDescription = table.Column<string>(type: "text", nullable: true),
-                    NumberOfReviews = table.Column<int>(type: "integer", nullable: false),
-                    Rating = table.Column<float>(type: "real", nullable: true),
+                    ReviewsNumber = table.Column<int>(type: "integer", nullable: false),
+                    Rating = table.Column<double>(type: "double precision", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,7 @@ namespace GranpAPI.Migrations
                 name: "Professionals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Profession = table.Column<int>(type: "integer", nullable: false),
                     Address_Street = table.Column<string>(type: "text", nullable: false),
@@ -57,18 +56,21 @@ namespace GranpAPI.Migrations
                     Address_Location_Latitude = table.Column<double>(type: "double precision", nullable: false),
                     Address_Location_Longitude = table.Column<double>(type: "double precision", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    NumberOfReviews = table.Column<int>(type: "integer", nullable: false),
+                    Verified = table.Column<bool>(type: "boolean", nullable: false),
+                    IdCardNumber = table.Column<string>(type: "text", nullable: false),
+                    ReviewsNumber = table.Column<int>(type: "integer", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
+                    TimeTable_WeeksInAdvance = table.Column<int>(type: "integer", nullable: false),
                     HourlyRate = table.Column<double>(type: "double precision", nullable: false),
                     MaxDistance = table.Column<int>(type: "integer", nullable: false),
-                    WeeksInAdvance = table.Column<int>(type: "integer", nullable: false),
                     LongTimeJob = table.Column<bool>(type: "boolean", nullable: false),
                     ShortTimeJob = table.Column<bool>(type: "boolean", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,10 +81,9 @@ namespace GranpAPI.Migrations
                 name: "CustomerReviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FromId = table.Column<int>(type: "integer", nullable: false),
-                    ToId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FromId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ToId = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Rating = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -108,10 +109,9 @@ namespace GranpAPI.Migrations
                 name: "ProfessionalReviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FromId = table.Column<int>(type: "integer", nullable: false),
-                    ToId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FromId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ToId = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Rating = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -134,21 +134,49 @@ namespace GranpAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TimeSlot",
+                name: "Reservations",
                 columns: table => new
                 {
-                    TimeTableProfessionalId = table.Column<int>(type: "integer", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DayOfWeek = table.Column<int>(type: "integer", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "interval", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProfessionalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsConfirmed = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TimeSlot", x => new { x.TimeTableProfessionalId, x.Id });
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TimeSlot_Professionals_TimeTableProfessionalId",
+                        name: "FK_Reservations_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Professionals_ProfessionalId",
+                        column: x => x.ProfessionalId,
+                        principalTable: "Professionals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimeSlots",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    WeekDay = table.Column<int>(type: "integer", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    TimeTableProfessionalId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSlots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TimeSlots_Professionals_TimeTableProfessionalId",
                         column: x => x.TimeTableProfessionalId,
                         principalTable: "Professionals",
                         principalColumn: "Id",
@@ -174,6 +202,21 @@ namespace GranpAPI.Migrations
                 name: "IX_ProfessionalReviews_ToId",
                 table: "ProfessionalReviews",
                 column: "ToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_CustomerId",
+                table: "Reservations",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ProfessionalId",
+                table: "Reservations",
+                column: "ProfessionalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeSlots_TimeTableProfessionalId",
+                table: "TimeSlots",
+                column: "TimeTableProfessionalId");
         }
 
         /// <inheritdoc />
@@ -186,7 +229,10 @@ namespace GranpAPI.Migrations
                 name: "ProfessionalReviews");
 
             migrationBuilder.DropTable(
-                name: "TimeSlot");
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "TimeSlots");
 
             migrationBuilder.DropTable(
                 name: "Customers");

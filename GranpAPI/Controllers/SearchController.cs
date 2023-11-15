@@ -12,20 +12,21 @@ using Granp.DTOs;
 | Method | Path | Description | Roles |
 | ------ | ---- | ----------- | ----- |
 | GET | /search | Search for professionals by filter | Customer |
-| GET | /search/{id} | Get professional's info by id | Customer |
+| GET | /search/info/{id} | Get professional's info by id | Customer |
 */
 
 namespace Granp.Controllers
 {
+    [ApiController, Route("search")]
     public class SearchController: GenericController<SearchController>
     {
         public SearchController(ILogger<SearchController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
 
         // TODO - Add pagination
-        [HttpGet, Authorize(Roles = "Customer")]
+        [HttpPost(""), Authorize(Roles = "Customer")]
         // Search for professionals by filter
-        public async Task<IActionResult> Search([FromQuery] SearchFilter filter)
+        public async Task<IActionResult> Search(SearchFilter filter)
         {
             // Get User Id from the authentication token
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -55,7 +56,7 @@ namespace Granp.Controllers
             return Ok(professionalProfileResponses);
         }
 
-        [HttpGet, Authorize(Roles = "Customer")]
+        [HttpGet("info"), Authorize(Roles = "Customer")]
         // Get professional's info by id
         public async Task<IActionResult> Get(Guid id)
         {

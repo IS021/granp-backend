@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Granp.Controllers;
 
-[ApiController]
+// [ApiController]
 public class ErrorController : ControllerBase
 {
     [NonAction]

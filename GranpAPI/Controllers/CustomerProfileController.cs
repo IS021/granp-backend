@@ -19,12 +19,13 @@ using Granp.DTOs;
 
 namespace Granp.Controllers
 {
+    [ApiController, Route("customers")]
     public class CustomerProfileController : GenericController<CustomerProfileController> 
     {
 
         public CustomerProfileController(ILogger<CustomerProfileController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
-        [HttpGet, Authorize(Roles = "Customer")]
+        [HttpGet("is_complete"), Authorize(Roles = "Customer")]
         // Check if the customer profile is in the database
         public async Task<IActionResult> IsComplete()
         {
@@ -50,7 +51,7 @@ namespace Granp.Controllers
             return Ok(true);
         }
 
-        [HttpPost, Authorize(Roles = "Customer")]
+        [HttpPost("complete"), Authorize(Roles = "Customer")]
         // Complete the customer profile
         public async Task<IActionResult> Complete(CustomerProfileRequest customerProfileRequest)
         {
@@ -73,10 +74,10 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the customer profile
-            return Ok(customer);
+            return Ok();
         }
 
-        [HttpGet, Authorize(Roles = "Customer")]
+        [HttpGet("get"), Authorize(Roles = "Customer")]
         // Get the customer profile
         public async Task<IActionResult> Get()
         {
@@ -105,7 +106,7 @@ namespace Granp.Controllers
             return Ok(customerProfileResponse);
         }
 
-        [HttpPut, Authorize(Roles = "Customer")]
+        [HttpPut("update"), Authorize(Roles = "Customer")]
         // Update the customer profile
         public async Task<IActionResult> Update(CustomerProfileRequest customerProfileRequest)
         {
@@ -137,10 +138,10 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the customer profile
-            return Ok(customer);
+            return Ok();
         }
 
-        [HttpDelete, Authorize(Roles = "Customer")]
+        [HttpDelete("delete"), Authorize(Roles = "Customer")]
         // Delete the customer profile
         public async Task<IActionResult> Delete()
         {
@@ -169,7 +170,7 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the customer profile
-            return Ok(customer);
+            return Ok();
         }
         
     }

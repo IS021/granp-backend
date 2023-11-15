@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GranpAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231022154752_Initial")]
+    [Migration("20231115200041_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,11 +27,9 @@ namespace GranpAPI.Migrations
 
             modelBuilder.Entity("Granp.Models.Entities.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ElderBirthDate")
                         .HasColumnType("timestamp with time zone");
@@ -58,19 +56,25 @@ namespace GranpAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsElder")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("NumberOfReviews")
-                        .HasColumnType("integer");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<float?>("Rating")
-                        .HasColumnType("real");
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("text");
+
+                    b.Property<double?>("Rating")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("ReviewsNumber")
+                        .HasColumnType("integer");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -83,11 +87,9 @@ namespace GranpAPI.Migrations
 
             modelBuilder.Entity("Granp.Models.Entities.CustomerReview", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -95,14 +97,14 @@ namespace GranpAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("FromId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("FromId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ToId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -115,11 +117,9 @@ namespace GranpAPI.Migrations
 
             modelBuilder.Entity("Granp.Models.Entities.Professional", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp with time zone");
@@ -138,6 +138,10 @@ namespace GranpAPI.Migrations
                     b.Property<double>("HourlyRate")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("IdCardNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -148,9 +152,6 @@ namespace GranpAPI.Migrations
                     b.Property<int>("MaxDistance")
                         .HasColumnType("integer");
 
-                    b.Property<int>("NumberOfReviews")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -158,8 +159,14 @@ namespace GranpAPI.Migrations
                     b.Property<int>("Profession")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("text");
+
                     b.Property<float>("Rating")
                         .HasColumnType("real");
+
+                    b.Property<int>("ReviewsNumber")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("ShortTimeJob")
                         .HasColumnType("boolean");
@@ -168,8 +175,8 @@ namespace GranpAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("WeeksInAdvance")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Verified")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -178,11 +185,9 @@ namespace GranpAPI.Migrations
 
             modelBuilder.Entity("Granp.Models.Entities.ProfessionalReview", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -190,14 +195,14 @@ namespace GranpAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("FromId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("FromId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ToId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -208,12 +213,42 @@ namespace GranpAPI.Migrations
                     b.ToTable("ProfessionalReviews");
                 });
 
+            modelBuilder.Entity("Granp.Models.Entities.Reservation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ProfessionalId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProfessionalId");
+
+                    b.ToTable("Reservations");
+                });
+
             modelBuilder.Entity("Granp.Models.Entities.Customer", b =>
                 {
                     b.OwnsOne("Granp.Models.Types.Address", "ElderAddress", b1 =>
                         {
-                            b1.Property<int>("CustomerId")
-                                .HasColumnType("integer");
+                            b1.Property<Guid>("CustomerId")
+                                .HasColumnType("uuid");
 
                             b1.Property<string>("City")
                                 .IsRequired()
@@ -240,8 +275,8 @@ namespace GranpAPI.Migrations
 
                             b1.OwnsOne("Granp.Models.Types.Location", "Location", b2 =>
                                 {
-                                    b2.Property<int>("AddressCustomerId")
-                                        .HasColumnType("integer");
+                                    b2.Property<Guid>("AddressCustomerId")
+                                        .HasColumnType("uuid");
 
                                     b2.Property<double>("Latitude")
                                         .HasColumnType("double precision");
@@ -288,8 +323,8 @@ namespace GranpAPI.Migrations
                 {
                     b.OwnsOne("Granp.Models.Types.Address", "Address", b1 =>
                         {
-                            b1.Property<int>("ProfessionalId")
-                                .HasColumnType("integer");
+                            b1.Property<Guid>("ProfessionalId")
+                                .HasColumnType("uuid");
 
                             b1.Property<string>("City")
                                 .IsRequired()
@@ -316,8 +351,8 @@ namespace GranpAPI.Migrations
 
                             b1.OwnsOne("Granp.Models.Types.Location", "Location", b2 =>
                                 {
-                                    b2.Property<int>("AddressProfessionalId")
-                                        .HasColumnType("integer");
+                                    b2.Property<Guid>("AddressProfessionalId")
+                                        .HasColumnType("uuid");
 
                                     b2.Property<double>("Latitude")
                                         .HasColumnType("double precision");
@@ -339,7 +374,10 @@ namespace GranpAPI.Migrations
 
                     b.OwnsOne("Granp.Models.Types.TimeTable", "TimeTable", b1 =>
                         {
-                            b1.Property<int>("ProfessionalId")
+                            b1.Property<Guid>("ProfessionalId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("WeeksInAdvance")
                                 .HasColumnType("integer");
 
                             b1.HasKey("ProfessionalId");
@@ -349,29 +387,32 @@ namespace GranpAPI.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProfessionalId");
 
-                            b1.OwnsMany("Granp.Models.Types.TimeSlot", "TimeSlots", b2 =>
+                            b1.OwnsMany("Granp.Models.Entities.TimeSlot", "TimeSlots", b2 =>
                                 {
-                                    b2.Property<int>("TimeTableProfessionalId")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<int>("Id")
+                                    b2.Property<Guid>("Id")
                                         .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b2.Property<int>("Id"));
-
-                                    b2.Property<int>("DayOfWeek")
-                                        .HasColumnType("integer");
+                                        .HasColumnType("uuid");
 
                                     b2.Property<TimeSpan>("EndTime")
                                         .HasColumnType("interval");
 
+                                    b2.Property<bool>("IsAvailable")
+                                        .HasColumnType("boolean");
+
                                     b2.Property<TimeSpan>("StartTime")
                                         .HasColumnType("interval");
 
-                                    b2.HasKey("TimeTableProfessionalId", "Id");
+                                    b2.Property<Guid>("TimeTableProfessionalId")
+                                        .HasColumnType("uuid");
 
-                                    b2.ToTable("TimeSlot");
+                                    b2.Property<int>("WeekDay")
+                                        .HasColumnType("integer");
+
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("TimeTableProfessionalId");
+
+                                    b2.ToTable("TimeSlots");
 
                                     b2.WithOwner()
                                         .HasForeignKey("TimeTableProfessionalId");
@@ -404,6 +445,25 @@ namespace GranpAPI.Migrations
                     b.Navigation("From");
 
                     b.Navigation("To");
+                });
+
+            modelBuilder.Entity("Granp.Models.Entities.Reservation", b =>
+                {
+                    b.HasOne("Granp.Models.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Granp.Models.Entities.Professional", "Professional")
+                        .WithMany()
+                        .HasForeignKey("ProfessionalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Professional");
                 });
 
             modelBuilder.Entity("Granp.Models.Entities.Customer", b =>

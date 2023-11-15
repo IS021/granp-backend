@@ -19,12 +19,13 @@ using Granp.DTOs;
 
 namespace Granp.Controllers
 {
+    [ApiController, Route("professionals")]
     public class ProfessionalProfileController : GenericController<ProfessionalProfileController> 
     {
 
         public ProfessionalProfileController(ILogger<ProfessionalProfileController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
-        [HttpGet, Authorize(Roles = "Professional")]
+        [HttpGet("is_complete"), Authorize(Roles = "Professional")]
         // Check if the professional profile is in the database
         public async Task<IActionResult> IsComplete()
         {
@@ -50,7 +51,7 @@ namespace Granp.Controllers
             return Ok(true);
         }
 
-        [HttpPost, Authorize(Roles = "Professional")]
+        [HttpPost("complete"), Authorize(Roles = "Professional")]
         // Complete the professional profile
         public async Task<IActionResult> Complete(ProfessionalProfileRequest professionalProfileRequest)
         {
@@ -73,10 +74,10 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the professional profile
-            return Ok(professional);
+            return Ok();
         }
 
-        [HttpGet, Authorize(Roles = "Professional")]
+        [HttpGet("get"), Authorize(Roles = "Professional")]
         // Get the professional profile
         public async Task<IActionResult> Get()
         {
@@ -105,7 +106,7 @@ namespace Granp.Controllers
             return Ok(professionalProfileResponse);
         }
 
-        [HttpPut, Authorize(Roles = "Professional")]
+        [HttpPut("update"), Authorize(Roles = "Professional")]
         // Update the professional profile
         public async Task<IActionResult> Update(ProfessionalProfileRequest professionalProfileRequest)
         {
@@ -137,10 +138,10 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the professional profile
-            return Ok(professional);
+            return Ok();
         }
 
-        [HttpDelete, Authorize(Roles = "Professional")]
+        [HttpDelete("delete"), Authorize(Roles = "Professional")]
         // Delete the professional profile
         public async Task<IActionResult> Delete()
         {
@@ -169,7 +170,7 @@ namespace Granp.Controllers
             await _unitOfWork.CompleteAsync();
 
             // Return the professional profile
-            return Ok(professional);
+            return Ok();
         }
         
     }

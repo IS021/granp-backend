@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
-
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,19 +41,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
     {
-        var audience = builder.Configuration["Authentication:Audience"];
-
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
         options.Authority = builder.Configuration["Authentication:Domain"];
-        options.Audience = audience;
+        options.Audience = builder.Configuration["Authentication:Audience"];
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true
+            NameClaimType = ClaimTypes.NameIdentifier,
+            RoleClaimType = ClaimTypes.Role
         };
     });
+
 
 // Add EF DB Context
 builder.Services.AddDbContext<DataContext>(options =>
@@ -77,47 +79,50 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1",
-            new OpenApiInfo
-            {
-                Title = "API",
-                Version = "v1",
-                Description = "A REST API",
-                TermsOfService = new Uri("https://lmgtfy.com/?q=i+like+pie")
-            });
+   option.SwaggerDoc("v1",
+           new OpenApiInfo
+           {
+               Title = "API",
+               Version = "v1",
+               Description = "A REST API",
+               TermsOfService = new Uri("https://lmgtfy.com/?q=i+like+pie")
+           });
 
-    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows
-        {
-            Implicit = new OpenApiOAuthFlow
-            {
-                Scopes = new Dictionary<string, string>
-                {
-                    { "openid", "Open Id" }
-                },
-                AuthorizationUrl = new Uri(builder.Configuration["Authentication:Domain"] + "authorize?audience=" + builder.Configuration["Authentication:Audience"])
-            }
-        }
-    });
+   option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+   {
+       Name = "Authorization",
+       In = ParameterLocation.Header,
+       Type = SecuritySchemeType.OAuth2,
+       Flows = new OpenApiOAuthFlows
+       {
+           Implicit = new OpenApiOAuthFlow
+           {
+               Scopes = new Dictionary<string, string>
+               {
+                    { "openid", "OpenID" },
+                    { "profile", "Profile" },
+                    { "email", "Email" },
+                    { "offline_access", "Offline Access" }
+               },
+               AuthorizationUrl = new Uri(builder.Configuration["Authentication:Domain"] + "authorize?audience=" + builder.Configuration["Authentication:Audience"])
+           }
+       }
+   });
 
-    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { }
-        }
-    });
+   option.AddSecurityRequirement(new OpenApiSecurityRequirement
+   {
+       {
+           new OpenApiSecurityScheme
+           {
+               Reference = new OpenApiReference
+               {
+                  Type = ReferenceType.SecurityScheme,
+                  Id = "Bearer"
+               }
+           },
+           new string[] { }
+       }
+   });
 });
 
 
