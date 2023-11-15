@@ -1,8 +1,9 @@
 using Granp.Models.Enums;
+using Granp.Models.Entities;
 
 namespace Granp.Models.Types 
 {
-    public class ProfessionalFilter
+    public class SearchFilter
     {
         public Location Location { get; set; } = null!;
         public Profession? Profession { get; set; }

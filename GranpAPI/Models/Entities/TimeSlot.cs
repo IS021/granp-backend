@@ -1,7 +1,7 @@
 using Granp.Models.Enums;
 using Granp.Models.Common;
 
-namespace Granp.Models.Types
+namespace Granp.Models.Entities
 {
     public class TimeSlot : BaseEntity
     {

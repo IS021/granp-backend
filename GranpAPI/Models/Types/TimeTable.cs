@@ -1,9 +1,10 @@
 using Granp.Models.Common;
+using Granp.Models.Entities;
 
 namespace Granp.Models.Types
 {
     // Should rapresent a week time table
-    public class TimeTable : BaseEntity
+    public class TimeTable
     {
         public int WeeksInAdvance { get; set; }
         public List<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();

@@ -12,6 +12,8 @@ namespace Granp.Data
         public DbSet<ProfessionalReview> ProfessionalReviews { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerReview> CustomerReviews { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   
@@ -40,7 +42,6 @@ namespace Granp.Data
                     {
                         a.OwnsOne(a => a.Location);
                     });
-
         }
     }
 }

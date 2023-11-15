@@ -11,7 +11,7 @@ namespace Granp.Services.Repositories
     {
         public ProfessionalRepository(DataContext context, ILogger logger) : base(context, logger) { }
 
-        public async Task<List<Professional>> GetProfessionalsByFilter(ProfessionalFilter filter)
+        public async Task<List<Professional>> GetByFilter(SearchFilter filter)
         {
             // All the filters are optional, so we need to check if they are null
             // All the criteria are ANDed together
@@ -72,7 +72,7 @@ namespace Granp.Services.Repositories
 
             if (filter.MaxWeeksInAdvance.HasValue)
             {
-                query = query.Where(p => p.WeeksInAdvance <= filter.MaxWeeksInAdvance.Value);
+                query = query.Where(p => p.TimeTable.WeeksInAdvance <= filter.MaxWeeksInAdvance.Value);
             }
 
             if (filter.MinRating.HasValue)

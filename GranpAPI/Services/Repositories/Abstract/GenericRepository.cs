@@ -49,7 +49,7 @@ namespace Granp.Services.Repositories
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await dbSet.FindAsync(id);
             if (entity == null)
@@ -70,7 +70,7 @@ namespace Granp.Services.Repositories
             }
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(Guid id)
         {
             try
             {

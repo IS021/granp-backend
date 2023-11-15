@@ -6,6 +6,6 @@ namespace Granp.Services.Repositories.Interfaces
 {
     public interface IProfessionalRepository : IUserRepository<Professional>
     {
-        Task<List<Professional>> GetProfessionalsByFilter(ProfessionalFilter filter);
+        Task<List<Professional>> GetByFilter(SearchFilter filter);
     }
 }

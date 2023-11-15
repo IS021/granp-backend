@@ -3,10 +3,11 @@ using Granp.DTOs;
 
 namespace Granp.Utils
 {
-    public class CustomerValidator : AbstractValidator<CustomerRequest>
+    public class CustomerValidator : AbstractValidator<CustomerProfileRequest>
     {
         public CustomerValidator()
         {
+            /*
             RuleFor(x => x)
                 .NotNull();
 
@@ -22,7 +23,7 @@ namespace Granp.Utils
                 .NotEmpty()
                 .EmailAddress()
                 .MaximumLength(50);
-
+            */
             // Other rules...
         }
     }

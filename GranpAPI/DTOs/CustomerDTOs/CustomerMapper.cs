@@ -9,8 +9,8 @@ namespace Granp.DTOs.Mappers
     {
         public CustomerMapperProfile()
         {
-            CreateMap<Customer, CustomerResponse>();
-            CreateMap<CustomerRequest, Customer>()
+            CreateMap<Customer, CustomerProfileResponse>();
+            CreateMap<CustomerProfileRequest, Customer>()
                 .BeforeMap((src, dest, ctx) => dest.UserId = ctx.Items["UserId"].ToString());
         }
     }
