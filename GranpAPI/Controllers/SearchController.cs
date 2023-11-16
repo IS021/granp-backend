@@ -56,7 +56,7 @@ namespace Granp.Controllers
             return Ok(professionalProfileResponses);
         }
 
-        [HttpGet("info"), Authorize(Roles = "Customer")]
+        [HttpGet("info/{id}"), Authorize(Roles = "Customer")]
         // Get professional's info by id
         public async Task<IActionResult> Get(Guid id)
         {

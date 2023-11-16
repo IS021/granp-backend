@@ -73,7 +73,7 @@ namespace Granp.Controllers
             // Save the changes to the database
             await _unitOfWork.CompleteAsync();
 
-            // Return the professional profile
+            // Return ok
             return Ok();
         }
 
@@ -102,7 +102,7 @@ namespace Granp.Controllers
             // Map the professional profile to a response
             var professionalProfileResponse = _mapper.Map<ProfessionalProfileResponse>(professional);
 
-            // Return the professional profile
+            // Return ok
             return Ok(professionalProfileResponse);
         }
 
@@ -137,7 +137,7 @@ namespace Granp.Controllers
             // Save the changes to the database
             await _unitOfWork.CompleteAsync();
 
-            // Return the professional profile
+            // Return ok
             return Ok();
         }
 
@@ -169,7 +169,7 @@ namespace Granp.Controllers
             // Save the changes to the database
             await _unitOfWork.CompleteAsync();
 
-            // Return the professional profile
+            // Return ok
             return Ok();
         }
         
