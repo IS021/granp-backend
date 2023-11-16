@@ -10,6 +10,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable // IDisposable is used to fre
 
     public ICustomerRepository Customers { get; private set; }
     public IProfessionalRepository Professionals { get; private set;}
+    public IReservationRepository Reservations { get; private set; }
 
     public UnitOfWork(DataContext context, ILoggerFactory loggerFactory)
     {
@@ -18,6 +19,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable // IDisposable is used to fre
 
         Customers = new CustomerRepository(_context, _logger);
         Professionals = new ProfessionalRepository(_context, _logger);
+        Reservations = new ReservationRepository(_context, _logger);
     }
 
     public async Task CompleteAsync()
