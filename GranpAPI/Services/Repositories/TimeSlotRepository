@@ -1,0 +1,17 @@
+using Granp.Data;
+using Granp.Models.Entities;
+using Granp.Services.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace Granp.Services.Repositories
+{
+    public class TimeSlotRepository : GenericRepository<TimeSlot, DataContext>, ITimeSlotRepository
+    {
+        public TimeSlotRepository(DataContext context, ILogger logger) : base(context, logger) { }
+
+        public async Task<List<TimeSlot>> GetTimeSlotsByProfessionalId(Guid professionalId)
+        {
+            return await _context.TimeSlots.Where(ts => ts.ProfessionalId == professionalId).ToListAsync();
+        }
+    }
+}
