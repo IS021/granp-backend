@@ -7,7 +7,8 @@ namespace Granp.DTOs
         public Guid Id { get; set; }
         public ProfessionalPublicResponse Professional { get; set; } = null!;
         public CustomerPublicResponse Customer { get; set; } = null!;
-        public DateTime Date { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public ReservationStatus Status { get; set; }
     }
 }

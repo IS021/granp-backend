@@ -11,7 +11,11 @@ namespace Granp.DTOs.Mappers
         {
 
             // Map customer and professional ids to entities
-            CreateMap<ReservationRequest, Reservation>();
+            CreateMap<ReservationRequest, Reservation>()
+                .BeforeMap((src, dest, ctx) => 
+                    {
+                        dest.CustomerId = (Guid) ctx.Items["CustomerId"];
+                    });
             CreateMap<Reservation, ReservationResponse>();
         }
     }

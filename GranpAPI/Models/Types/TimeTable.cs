@@ -1,6 +1,8 @@
 using Granp.Models.Common;
 using Granp.Models.Entities;
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Granp.Models.Types
 {
     // Should rapresent a week time table
@@ -8,6 +10,9 @@ namespace Granp.Models.Types
     {
         public int WeeksInAdvance { get; set; }
         public List<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+        
+        [ForeignKey("Professional")]
+        public Guid ProfessionalId { get; set; }
 
         // Overlap percentage between this timetable and a list of timeslots
         public double Overlap(List<TimeSlot> slots)

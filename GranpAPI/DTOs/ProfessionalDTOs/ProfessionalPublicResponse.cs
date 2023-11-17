@@ -6,6 +6,7 @@ namespace Granp.DTOs
     public class ProfessionalPublicResponse
     {
         // User Info
+        public Guid Id { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!; // Is this needed?

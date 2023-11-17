@@ -26,7 +26,7 @@ namespace Granp.Controllers
     {
         public ReservationController(ILogger<ReservationController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
-        [HttpPost("create"), Authorize(Roles = "Customer")]
+        [HttpPost("request"), Authorize(Roles = "Customer")]
         // Create a reservation
         public async Task<IActionResult> RequestReservation(ReservationRequest reservationRequest)
         {
@@ -49,7 +49,7 @@ namespace Granp.Controllers
             }
 
             // Create a new reservation
-            var reservation = _mapper.Map<Reservation>(reservationRequest);
+            var reservation = _mapper.Map<Reservation>(reservationRequest, opts => opts.Items["CustomerId"] = customer.Id);
 
             // Set the customer profile
             await _unitOfWork.Reservations.Add(reservation);

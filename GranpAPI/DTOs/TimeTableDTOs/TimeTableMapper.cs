@@ -12,10 +12,7 @@ namespace Granp.DTOs.Mappers
         {
             // Map Timetable to TimetableResponse 
             CreateMap<TimeTableRequest, TimeTable>()
-                .BeforeMap((src, dest, ctx) => 
-                    {
-                        dest.TimeSlots.ForEach(slot => slot.ProfessionalId = Guid.Parse(ctx.Items["ProfessionalId"].ToString()));
-                    });
+                .BeforeMap((src, dest, ctx) => dest.ProfessionalId = (Guid) ctx.Items["ProfessionalId"]);
             CreateMap<TimeTable, TimeTableResponse>();
         }
     }

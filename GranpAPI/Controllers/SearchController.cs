@@ -26,7 +26,7 @@ namespace Granp.Controllers
         // TODO - Add pagination
         [HttpPost(""), Authorize(Roles = "Customer")]
         // Search for professionals by filter
-        public async Task<IActionResult> Search(SearchFilter filter)
+        public async Task<IActionResult> Search()//SearchFilter filter)
         {
             // Get User Id from the authentication token
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -47,13 +47,14 @@ namespace Granp.Controllers
             }
 
             // Get the professionals from the database
-            var professionals = await _unitOfWork.Professionals.GetByFilter(filter);
+            //var professionals = await _unitOfWork.Professionals.GetByFilter(filter);
+            var professionals = await _unitOfWork.Professionals.GetAll();
 
             // Map the professionals to a list of professional profile responses
-            var professionalProfileResponses = _mapper.Map<List<ProfessionalProfileResponse>>(professionals);
+            var professionalPublicResponses = _mapper.Map<List<ProfessionalPublicResponse>>(professionals);
 
             // Return the list of professional profile responses
-            return Ok(professionalProfileResponses);
+            return Ok(professionalPublicResponses);
         }
 
         [HttpGet("info/{id}"), Authorize(Roles = "Customer")]

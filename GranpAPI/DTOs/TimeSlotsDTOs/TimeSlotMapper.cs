@@ -10,8 +10,7 @@ namespace Granp.DTOs.Mappers
     {
         public TimeSlotMapperProfile()
         { 
-            CreateMap<TimeSlotRequest, TimeSlot>()
-                .BeforeMap((src, dest, ctx) => dest.ProfessionalId = Guid.Parse(ctx.Items["ProfessionalId"].ToString()));
+            CreateMap<TimeSlotRequest, TimeSlot>();
             CreateMap<TimeSlot, TimeSlotResponse>();
         }
     }

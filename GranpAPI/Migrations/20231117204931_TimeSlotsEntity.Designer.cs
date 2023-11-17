@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GranpAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231115200041_Initial")]
-    partial class Initial
+    [Migration("20231117204931_TimeSlotsEntity")]
+    partial class TimeSlotsEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,14 +225,14 @@ namespace GranpAPI.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
-
                     b.Property<Guid>("ProfessionalId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
