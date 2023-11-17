@@ -10,8 +10,11 @@ namespace Granp.DTOs.Mappers
         public ProfessionalMapperProfile()
         {
             CreateMap<Professional, ProfessionalProfileResponse>();
+            CreateMap<Professional, ProfessionalPublicResponse>();
+            
             CreateMap<ProfessionalProfileRequest, Professional>()
                 .BeforeMap((src, dest, ctx) => dest.UserId = ctx.Items["UserId"].ToString());
+
         }
     }
 }

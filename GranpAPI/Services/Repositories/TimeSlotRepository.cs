@@ -9,7 +9,7 @@ namespace Granp.Services.Repositories
     {
         public TimeSlotRepository(DataContext context, ILogger logger) : base(context, logger) { }
 
-        public async Task<List<TimeSlot>> GetTimeSlotsByProfessionalId(Guid professionalId)
+        public async Task<List<TimeSlot>> GetByProfessionalId(Guid professionalId)
         {
             return await _context.TimeSlots.Where(ts => ts.ProfessionalId == professionalId).ToListAsync();
         }

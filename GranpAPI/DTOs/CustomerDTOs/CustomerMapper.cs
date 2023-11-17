@@ -10,6 +10,8 @@ namespace Granp.DTOs.Mappers
         public CustomerMapperProfile()
         {
             CreateMap<Customer, CustomerProfileResponse>();
+            CreateMap<Customer, CustomerPublicResponse>();
+            
             CreateMap<CustomerProfileRequest, Customer>()
                 .BeforeMap((src, dest, ctx) => dest.UserId = ctx.Items["UserId"].ToString())
                 // if src.isElder is true than ElderFirstName and ElderLastName and ElderPhoneNumber == src.FirstName and src.LastName and src.PhoneNumber

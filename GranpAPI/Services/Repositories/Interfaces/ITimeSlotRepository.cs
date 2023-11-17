@@ -6,6 +6,6 @@ namespace Granp.Services.Repositories.Interfaces
 {
     public interface ITimeSlotRepository : IGenericRepository<TimeSlot>
     {
-        Task<List<TimeSlot>> GetTimeSlotsByProfessionalId(Guid professionalId);
+        Task<List<TimeSlot>> GetByProfessionalId(Guid professionalId);
     }
 }

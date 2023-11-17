@@ -5,6 +5,7 @@ namespace Granp.Services.Repositories.Interfaces
         ICustomerRepository Customers { get; } 
         IProfessionalRepository Professionals { get; }
         IReservationRepository Reservations { get; }
+        ITimeSlotRepository TimeSlots { get; }
         Task CompleteAsync();
     }
 

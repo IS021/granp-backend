@@ -9,10 +9,10 @@ namespace Granp.DTOs.Mappers
     {
         public ReservationMapperProfile()
         {
-            // CreateMap<Reservation, ProfessionalProfileResponse>();
 
             // Map customer and professional ids to entities
             CreateMap<ReservationRequest, Reservation>();
+            CreateMap<Reservation, ReservationResponse>();
         }
     }
 }
