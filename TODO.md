@@ -7,11 +7,16 @@
 Join the CustomerProfileRequest to the CustomerProfileResponse into CustomerProfileDto?
 
 Files to Fix:
+
+FILTER
+
+CREATE UPDATE DTOS TO HANDLE NULLS AND DIFFERENCES
+
 - DTOs:
-    - CustomerProfileRequest
-    - CustomerProfileResponse
-    - ProfessionalProfileRequest
-    - ProfessionalProfileResponse
+    .- CustomerProfileRequest 
+    .- CustomerProfileResponse
+    .- ProfessionalProfileRequest
+    .- ProfessionalProfileResponse
 - Mappers:
     - CustomerProfileMapper
     - ProfessionalProfileMapper
@@ -29,3 +34,9 @@ Files to Fix:
 
 - Controller:
     - SearchController (FILTER)
+
+
+
+FOR NOTIFICATION:
+
+- Modify RESERVATION CONTROLLER

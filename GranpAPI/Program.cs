@@ -1,6 +1,7 @@
 using Granp.Data;
 using Granp.Services.Repositories.Interfaces;
 using Granp.Services.Repositories;
+using Granp.Services.SignalR;
 using Granp.Middlewares;
 
 using Microsoft.EntityFrameworkCore;
@@ -28,16 +29,20 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         // Allow any origin for testing purposes.
-        policy.WithOrigins(
+        policy
+        .WithOrigins(
             "capacitor://localhost",
-            "http://localhost"
+            "http://localhost",
+            "https://gourav-d.github.io"
         )
-            .WithHeaders(new string[] {
-                HeaderNames.ContentType,
-                HeaderNames.Authorization,
-            })
-            .WithMethods("GET")
-            .SetPreflightMaxAge(TimeSpan.FromSeconds(86400));
+        .AllowCredentials()
+        .AllowAnyHeader()
+        /*.WithHeaders(new string[] {
+            HeaderNames.ContentType,
+            HeaderNames.Authorization,
+        })*/
+        .WithMethods("GET", "POST", "PUT", "DELETE")
+        .SetPreflightMaxAge(TimeSpan.FromSeconds(86400));
     });
 });
 
@@ -128,9 +133,8 @@ builder.Services.AddSwaggerGen(option =>
 
 var app = builder.Build();
 
-app.MapControllers();
-
 app.MapHub<ChatHub>("/chathub");
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
