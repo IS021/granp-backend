@@ -2,7 +2,6 @@ using AutoMapper;
 
 using Granp.DTOs;
 using Granp.Models.Entities;
-using Granp.Services.SignalR;
 
 namespace Granp.DTOs.Mappers
 {
@@ -15,8 +14,8 @@ namespace Granp.DTOs.Mappers
             // "user" if SenderId == userId, "other" otherwise
                 .BeforeMap((src, dest, ctx) => dest.Sender = src.SenderId == (Guid)ctx.Items["UserId"] ? "user" : "other")
                 .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time.ToLocalTime()));          
-            CreateMap<ChatMessageRequest, SignalRChatMessage>()
-                .BeforeMap((src, dest, ctx) => dest.From = ctx.Items["From"].ToString());
+            
+            CreateMap<Message, SignalRMessage>();
 
         }
     }

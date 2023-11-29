@@ -263,8 +263,11 @@ namespace Granp.Controllers
             // Save the changes to the database
             await _unitOfWork.CompleteAsync();
 
+            // Map the message to the SignalRMessage DTO
+            var signalRMessage = _mapper.Map<SignalRMessage>(newMessage);
+
             // Send the message to the chat group
-            await hubContext.Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", message);
+            await hubContext.Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", signalRMessage);
 
             return Ok();
         }

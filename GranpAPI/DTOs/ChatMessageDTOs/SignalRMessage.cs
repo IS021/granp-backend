@@ -1,12 +1,11 @@
-namespace GranpAPI.DTOs
+namespace Granp.DTOs
 {
     public class SignalRMessage
     {
-        public string ConnectionId { get; set; } = null!;
-        public Guid From { get; set; }
+        public Guid ChatId { get; set; }
+        public Guid SenderId { get; set; }
         public string Content { get; set; } = null!;
         public bool Read { get; set; } // TODO: Remove this?
         public DateTime Time { get; set; }
     }
-
 }
