@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.SignalR;
 
 using Granp.Services.Repositories;
 using Granp.Services.Repositories.Interfaces;
+using Granp.Services.Repositories.Extensions;
 
 using System.Security.Claims;
 
 namespace Granp.Services.SignalR
 {
-    // [Authorize]
+    [Authorize]
     public class ChatHub : Hub<IChatHub>
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -39,38 +40,19 @@ namespace Granp.Services.SignalR
                 // Error
                 throw new HubException("No Identity");
             }
+            
+            // Get user from database using extension method
+            var user = await _unitOfWork.GetUser(userId);
 
-            // If the user is a customer
-            if (role == "Customer")
+            // If the user is null, return bad request
+            if (user == null)
             {
-                // Get the customer profile from the database
-                var customer = await _unitOfWork.Customers.GetByUserId(userId);
-
-                // If the customer profile is not in the database, return false
-                if (customer == null)
-                {
-                    // Error
-                    throw new HubException("No Identity");
-                }
-
-                // Add the connection id to the customer group
-                await Groups.AddToGroupAsync(Context.ConnectionId, "c-" + customer.Id.ToString());
-            } 
-            else if (role == "Professional")
-            {
-                // Get the professional profile from the database
-                var professional = await _unitOfWork.Professionals.GetByUserId(userId);
-
-                // If the professional profile is not in the database, return false
-                if (professional == null)
-                {
-                    // Error ?
-                    throw new HubException("No Identity");
-                }
-
-                // Add the connection id to the professional group
-                await Groups.AddToGroupAsync(Context.ConnectionId, "p-" + professional.Id.ToString());
+                // Error
+                throw new HubException("No Identity");
             }
+
+            // Add the connection id to the user group
+            await Groups.AddToGroupAsync(Context.ConnectionId, user.Id.ToString());
 
             await base.OnConnectedAsync();
         }

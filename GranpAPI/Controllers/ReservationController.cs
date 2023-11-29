@@ -6,6 +6,7 @@ using AutoMapper;
 using Granp.Models.Entities;
 using Granp.Models.Enums;
 using Granp.Services.Repositories.Interfaces;
+using Granp.Services.Repositories.Extensions;
 using Granp.DTOs;
 
 
@@ -85,49 +86,25 @@ namespace Granp.Controllers
                 return BadRequest();
             }
 
-            // If the user is a customer
-            if (User.IsInRole("Customer"))
+            // Use the user lookup extension to get the user
+            var user = await _unitOfWork.GetUser(userId);
+
+            // If the user is not in the database, return bad request
+            if (user == null)
             {
-                // Get the customer profile from the database
-                var customer = await _unitOfWork.Customers.GetByUserId(userId);
-
-                // If the customer profile is not in the database, return bad request
-                if (customer == null)
-                {
-                    return BadRequest();
-                }
-
-                // If the reservation does not belong to the customer, return bad request
-                if (reservation.Customer!.Id != customer.Id)
-                {
-                    return BadRequest();
-                }
-
-                // Set the reservation status to cancelled
-                reservation.Status = ReservationStatus.Cancelled;
+                return BadRequest();
             }
 
-            // If the user is a professional
-            if (User.IsInRole("Professional"))
+            // If the reservation does not belong to the user, return bad request
+            if (reservation.Customer!.Id != user.Id && reservation.Professional!.Id != user.Id)
             {
-                // Get the professional profile from the database
-                var professional = await _unitOfWork.Professionals.GetByUserId(userId);
-
-                // If the professional profile is not in the database, return bad request
-                if (professional == null)
-                {
-                    return BadRequest();
-                }
-
-                // If the reservation does not belong to the professional, return bad request
-                if (reservation.Professional!.Id != professional.Id)
-                {
-                    return BadRequest();
-                }
-
-                // Set the reservation status to canceled
-                reservation.Status = ReservationStatus.Cancelled;
+                return BadRequest();
             }
+
+            // Set the reservation status to cancelled
+            reservation.Status = ReservationStatus.Cancelled;
+
+            // NOTIFY CUSTOMER AND PROFESSIONAL
 
             // Save changes to the database
             await _unitOfWork.CompleteAsync();
@@ -149,42 +126,30 @@ namespace Granp.Controllers
                 return BadRequest();
             }
 
-            // If the user is a customer
-            if (User.IsInRole("Customer"))
+            // Use the user lookup extension to get the user
+            var user = await _unitOfWork.GetUser(userId);
+
+            // If the user is not in the database, return bad request
+            if (user == null)
             {
-                // Get the customer profile from the database
-                var customer = await _unitOfWork.Customers.GetByUserId(userId);
+                return BadRequest();
+            }
 
-                // If the customer profile is not in the database, return bad request
-                if (customer == null)
-                {
-                    return BadRequest();
-                }
-
+            // If the user is a customer
+            if (user is Customer)
+            {
                 // Get all reservations from the database
-                var reservations = await _unitOfWork.Reservations.GetByCustomerId(customer.Id);
+                var reservations = await _unitOfWork.Reservations.GetByCustomerId(user.Id);
 
                 // Map the reservations to a response
                 var reservationsResponse = _mapper.Map<IEnumerable<ReservationResponse>>(reservations);
 
                 // Return ok
                 return Ok(reservationsResponse);
-            }
-
-            // If the user is a professional
-            if (User.IsInRole("Professional"))
+            } else if (user is Professional)
             {
-                // Get the professional profile from the database
-                var professional = await _unitOfWork.Professionals.GetByUserId(userId);
-
-                // If the professional profile is not in the database, return bad request
-                if (professional == null)
-                {
-                    return BadRequest();
-                }
-
                 // Get all reservations from the database
-                var reservations = await _unitOfWork.Reservations.GetByProfessionalId(professional.Id);
+                var reservations = await _unitOfWork.Reservations.GetByProfessionalId(user.Id);
 
                 // Map the reservations to a response
                 var reservationsResponse = _mapper.Map<IEnumerable<ReservationResponse>>(reservations);

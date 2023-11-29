@@ -25,7 +25,7 @@ namespace Granp.Controllers
 
         public ProfessionalProfileController(ILogger<ProfessionalProfileController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
-        [HttpGet("is_complete"), Authorize(Roles = "Professional")]
+        [HttpGet("is-complete"), Authorize(Roles = "Professional")]
         // Check if the professional profile is in the database
         public async Task<IActionResult> IsComplete()
         {

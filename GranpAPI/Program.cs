@@ -3,6 +3,7 @@ using Granp.Services.Repositories.Interfaces;
 using Granp.Services.Repositories;
 using Granp.Services.SignalR;
 using Granp.Middlewares;
+using Granp.Models.Types;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +12,7 @@ using Microsoft.Net.Http.Headers;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
+using MongoDB.Bson.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,10 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 
 // Add SignalR
 builder.Services.AddSignalR();
+
+// Add services to the container.
+builder.Services.Configure<DatabaseSettings>(
+    builder.Configuration.GetSection("ChatsDatabase"));
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -67,6 +73,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// Add Mongo DB Context
+builder.Services.AddSingleton<MongoDbContext>();
 
 // Add UnitOfWork to DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

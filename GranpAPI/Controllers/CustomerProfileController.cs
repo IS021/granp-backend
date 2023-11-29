@@ -25,7 +25,7 @@ namespace Granp.Controllers
 
         public CustomerProfileController(ILogger<CustomerProfileController> logger, IUnitOfWork unitOfWork, IMapper mapper) : base(logger, unitOfWork, mapper) { }
 
-        [HttpGet("is_complete"), Authorize(Roles = "Customer")]
+        [HttpGet("is-complete"), Authorize(Roles = "Customer")]
         // Check if the customer profile is in the database
         public async Task<IActionResult> IsComplete()
         {

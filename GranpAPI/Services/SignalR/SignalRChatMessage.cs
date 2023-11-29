@@ -1,6 +1,6 @@
 namespace Granp.Services.SignalR
 {
-    public class ChatMessage
+    public class SignalRChatMessage
     {
         public string ConnectionId { get; set; } = null!;
         public string From { get; set; } = null!;
