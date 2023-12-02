@@ -39,7 +39,7 @@ builder.Services.AddCors(options =>
         .WithOrigins(
             "capacitor://localhost",
             "http://localhost",
-            "https://gourav-d.github.io"
+            "http://localhost:4200"
         )
         .AllowCredentials()
         .AllowAnyHeader()

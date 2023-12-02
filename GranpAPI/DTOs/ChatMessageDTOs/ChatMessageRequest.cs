@@ -5,6 +5,6 @@ namespace Granp.DTOs
         public string ConnectionId { get; set; } = null!;
         public Guid ChatId { get; set; }
         public string Content { get; set; } = null!;
-        public DateTime Date { get; set; }
+        public DateTime Time { get; set; }
     }
 }

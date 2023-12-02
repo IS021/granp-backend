@@ -27,6 +27,16 @@ namespace Granp.Services.Repositories
             return (int) await _collection.Find(x => x.ChatId == chatId && x.SenderId != userId && x.Read == false).CountDocumentsAsync();
         }
 
+        // Mark all messages from a chat as read (except the ones sent by the user)
+        public async Task<bool> MarkAsRead(Guid chatId, Guid userId)
+        {
+            // Messages not sent by the user
+            var filter = Builders<Message>.Filter.Eq(x => x.ChatId, chatId) & Builders<Message>.Filter.Ne(x => x.SenderId, userId);
+            var update = Builders<Message>.Update.Set(x => x.Read, true);
+            var result = await _collection.UpdateManyAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+
         // public async Task<List<Message>> GetLastByChatId(Guid chatId, int n)
     }
 }

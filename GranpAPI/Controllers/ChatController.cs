@@ -120,7 +120,8 @@ namespace Granp.Controllers
                 // If the other user profile is null, return bad request
                 if (otherUser == null)
                 {
-                    return BadRequest("Other user is null");
+                    // BadRequest("Other user is null");
+                    continue;
                 }
 
                 /*
@@ -159,7 +160,7 @@ namespace Granp.Controllers
         }
 
         // Get chat messages
-        [HttpGet("messages"), Authorize(Roles = "Customer, Professional")]
+        [HttpGet("messages/{chatId}"), Authorize(Roles = "Customer, Professional")]
         public async Task<IActionResult> GetChatMessages(Guid chatId)
         {
             // Get User Id from the authentication token
@@ -254,7 +255,7 @@ namespace Granp.Controllers
                 ChatId = message.ChatId,
                 SenderId = user.Id,
                 Content = message.Content,
-                Time = DateTime.Now
+                Time = message.Time
             };
 
             // Add the message to the database
@@ -267,9 +268,51 @@ namespace Granp.Controllers
             var signalRMessage = _mapper.Map<SignalRMessage>(newMessage);
 
             // Send the message to the chat group
-            await hubContext.Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", signalRMessage);
+            foreach (var member in chat.Members)
+            {
+                if (member == user.Id)
+                {
+                    continue;
+                }
+                await hubContext.Clients.Group(member.ToString()).SendAsync("ReceiveMessage", signalRMessage);
+            }
 
             return Ok();
         }
+
+        // Mark messages from the other user in a sepcific chat as read
+        [HttpPost("read/{chatId}"), Authorize(Roles = "Customer, Professional")]
+        public async Task<IActionResult> MarkMessagesAsRead(Guid chatId)
+        {
+            // Get User Id from the authentication token
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Use extension method to get the user profile
+            var user = await _unitOfWork.GetUser(userId);
+
+            // Get the chat from the database
+            var chat = await _unitOfWork.Chats.GetById(chatId);
+
+            // If the chat is null, return bad request
+            if (chat == null)
+            {
+                return BadRequest("Chat is null");
+            }
+
+            // If the user is not a member of the chat, return bad request
+            if (!chat.Members.Contains(user.Id))
+            {
+                return BadRequest("User is not a member of the chat");
+            }
+
+            // Mark messages as read
+            await _unitOfWork.Messages.MarkAsRead(chatId, user.Id);
+
+            // Save the changes to the database
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
+        }
+
     }
 }

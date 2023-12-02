@@ -8,6 +8,7 @@ namespace Granp.Services.Repositories.Interfaces
         Task<List<Message>> GetByChatId(Guid chatId);
         Task<Message> GetLastByChatId(Guid chatId);
         Task<int> GetUnreadCount(Guid chatId, Guid userId);
+        Task<bool> MarkAsRead(Guid chatId, Guid userId);
 
         // Get last n messages from a chat
         // Task<List<Message>> GetLastByChatId(Guid chatId, int n);
