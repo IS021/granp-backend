@@ -21,7 +21,7 @@ namespace Granp.DTOs
         
         // Job Info
         public double HourlyRate { get; set; }
-        public int MaxDistance { get; set; }
+        //public int MaxDistance { get; set; }
         public bool LongTimeJob { get; set; }
         public bool ShortTimeJob { get; set; }
     }
