@@ -20,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.AddServerHeader = false;
+    serverOptions.ListenAnyIP(5255);
 });
 
 // Add SignalR
