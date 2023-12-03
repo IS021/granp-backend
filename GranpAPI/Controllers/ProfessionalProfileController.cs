@@ -10,16 +10,16 @@ using Granp.DTOs;
 /*
 | Method | Path | Description | Roles |
 | ------ | ---- | ----------- | ----- |
-| GET | /professionals/is-complete | Check if profile is complete | Professional |
-| POST | /professionals/complete | Complete professional profile | Professional |
-| GET | /professionals/get | Get professional profile | Professional |
-| PUT | /professionals/update | Update professional profile | Professional |
-| DELETE | /professionals/delete | Delete profile | Professional |
+| GET | /professional/is-complete | Check if profile is complete | Professional |
+| POST | /professional/complete | Complete professional profile | Professional |
+| GET | /professional/get | Get professional profile | Professional |
+| PUT | /professional/update | Update professional profile | Professional |
+| DELETE | /professional/delete | Delete profile | Professional |
 */
 
 namespace Granp.Controllers
 {
-    [ApiController, Route("professionals")]
+    [ApiController, Route("professional")]
     public class ProfessionalProfileController : GenericController<ProfessionalProfileController> 
     {
 
