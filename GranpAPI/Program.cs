@@ -154,7 +154,7 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
         c.OAuthClientId(builder.Configuration["Authentication:ClientId"]);
-        c.OAuth2RedirectUrl("http://localhost:5255/swagger/oauth2-redirect.html");
+        c.OAuth2RedirectUrl("http://bigweldnas.direct.quickconnect.to:35255/swagger/oauth2-redirect.html");
     });
 }
 

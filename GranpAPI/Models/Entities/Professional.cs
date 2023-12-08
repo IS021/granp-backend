@@ -11,7 +11,7 @@ namespace Granp.Models.Entities
         public string? Description { get; set; }
         public Profession Profession { get; set; }
         public Address Address { get; set; } = null!;
-        public DateTime BirthDate { get; set; }
+        public DateOnly BirthDate { get; set; }
         public bool Verified { get; set; }
         public string IdCardNumber { get; set; } = null!;
         

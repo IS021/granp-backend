@@ -16,7 +16,7 @@ namespace Granp.DTOs
         public string? ElderFirstName { get; set; }
         public string? ElderLastName { get; set; }
         public Address ElderAddress { get; set; } = null!;
-        public DateTime ElderBirthDate { get; set; }
+        public DateOnly ElderBirthDate { get; set; }
         public string? ElderPhoneNumber { get; set; }
         public string? ElderDescription { get; set; }
     }

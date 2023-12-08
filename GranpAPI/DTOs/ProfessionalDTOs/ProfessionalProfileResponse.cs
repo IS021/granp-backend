@@ -15,7 +15,7 @@ namespace Granp.DTOs
         public string? Description { get; set; }
         public Profession Profession { get; set; }
         public Address Address { get; set; } = null!;
-        public DateTime BirthDate { get; set; }
+        public DateOnly BirthDate { get; set; }
         public string IdCardNumber { get; set; } = null!;
         public bool IsVerified { get; set; }
 

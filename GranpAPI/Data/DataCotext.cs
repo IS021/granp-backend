@@ -25,6 +25,8 @@ namespace Granp.Data
                     {
                         a.OwnsOne(a => a.Location);
                     });
+                
+            modelBuilder.Entity<Professional>().HasIndex(p => p.UserId).IsUnique();
 
             modelBuilder.Entity<Professional>()
                 .OwnsOne(
@@ -42,6 +44,8 @@ namespace Granp.Data
                     {
                         a.OwnsOne(a => a.Location);
                     });
+
+            modelBuilder.Entity<Customer>().HasIndex(c => c.UserId).IsUnique();
         }
     }
 }
