@@ -129,7 +129,7 @@ namespace Granp.Controllers
             }
 
             // Map the request to the professional profile
-            _mapper.Map(professionalProfileRequest, professional);
+            _mapper.Map(professionalProfileRequest, professional, opts => opts.Items["UserId"] = userId);
 
             // Update the professional profile in the database
             await _unitOfWork.Professionals.Update(professional);

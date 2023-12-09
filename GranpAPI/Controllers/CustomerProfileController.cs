@@ -129,7 +129,7 @@ namespace Granp.Controllers
             }
 
             // Map the request to the customer profile
-            _mapper.Map(customerProfileRequest, customer);
+            _mapper.Map(customerProfileRequest, customer, opts => opts.Items["UserId"] = userId);
 
             // Update the customer profile in the database
             await _unitOfWork.Customers.Update(customer);

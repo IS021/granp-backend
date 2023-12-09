@@ -1,4 +1,5 @@
 using Granp.Models.Types;
+using Granp.Models.Enums;
 
 namespace Granp.DTOs
 {
@@ -10,7 +11,9 @@ namespace Granp.DTOs
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         //public string Email { get; set; } = null!;
+        public Gender Gender { get; set; }
         public string PhoneNumber { get; set; } = null!;
+        public string? ProfilePicture { get; set; }
         
         // Elder Info
         public string? ElderFirstName { get; set; }

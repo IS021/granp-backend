@@ -20,20 +20,6 @@ namespace Granp.Services.Repositories
             // Do this with LINQ and without getting all the professionals from the database
             // Do this in a single efficient query
 
-            // Example:
-            // SELECT * FROM Professionals
-            // WHERE (Profession = filter.Profession OR filter.Profession IS NULL)
-            // AND (Location = filter.Location OR filter.Location IS NULL)
-            // AND (TimeSlot = filter.TimeSlot OR filter.TimeSlot IS NULL)
-            // AND (HourlyRate <= filter.MaxHourlyRate OR filter.MaxHourlyRate IS NULL)
-            // AND (LongTimeJob = filter.LongTimeJob OR filter.LongTimeJob IS NULL)
-            // AND (ShortTimeJob = filter.ShortTimeJob OR filter.ShortTimeJob IS NULL)
-            // AND (Distance <= filter.MaxDistance OR filter.MaxDistance IS NULL)
-            // AND (WeeksInAdvance <= filter.MaxWeeksInAdvance OR filter.MaxWeeksInAdvance IS NULL)
-            // AND (Rating >= filter.MinRating OR filter.MinRating IS NULL)
-            // AND (Age >= filter.MinAge OR filter.MinAge IS NULL)
-            // AND (Age <= filter.MaxAge OR filter.MaxAge IS NULL)
-
             // Start with a query that includes all professionals
             IQueryable<Professional> query = _context.Professionals;
 
@@ -68,11 +54,6 @@ namespace Granp.Services.Repositories
             if (filter.ShortTimeJob.HasValue)
             {
                 query = query.Where(p => p.ShortTimeJob == filter.ShortTimeJob.Value);
-            }
-
-            if (filter.MaxWeeksInAdvance.HasValue)
-            {
-                query = query.Where(p => p.TimeTable.WeeksInAdvance <= filter.MaxWeeksInAdvance.Value);
             }
 
             if (filter.MinRating.HasValue)

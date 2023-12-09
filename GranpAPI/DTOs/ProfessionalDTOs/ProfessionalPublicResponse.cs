@@ -10,7 +10,9 @@ namespace Granp.DTOs
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!; // Is this needed?
+        public Gender Gender { get; set; }
         public string PhoneNumber { get; set; } = null!;
+        public string? ProfilePicture { get; set; }
         
         // Profile Info
         public string? Description { get; set; }
