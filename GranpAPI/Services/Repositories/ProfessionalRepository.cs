@@ -23,22 +23,11 @@ namespace Granp.Services.Repositories
             // Start with a query that includes all professionals
             IQueryable<Professional> query = _context.Professionals;
 
-            // Apply the location filter
-            if (filter.Location != null)
-            {
-                query = query.Where(p => p.Address.Location.DistanceTo(filter.Location) <= p.MaxDistance);
-            }
 
             // Apply the other filters only if they are not null
             if (filter.Profession.HasValue)
             {
                 query = query.Where(p => p.Profession == filter.Profession.Value);
-            }
-
-            // TODO: Build Better Logic for TimeSlot comparison
-            if (filter.TimeSlots != null)
-            {
-                query = query.Where(p => p.TimeTable.Overlap(filter.TimeSlots) >= 0.9);
             }
 
             if (filter.MaxHourlyRate.HasValue)
@@ -71,11 +60,38 @@ namespace Granp.Services.Repositories
                 query = query.Where(p => p.Age <= filter.MaxAge.Value);
             }
 
+            // Execute query and return the results
+            List<Professional> professionals = await query.ToListAsync();
+            
+            // Where(p => p.Address.Location.DistanceTo(filter.Location) <= p.MaxDistance);
+
+            // Filter by distance clientside
+            foreach (var professional in professionals.ToList())
+            {
+                if (professional.Address.Location.DistanceTo(filter.Location) > professional.MaxDistance)
+                {
+                    professionals.Remove(professional);
+                }
+            }
+
+            // TODO: Build Better Logic for TimeSlot comparison
+            if (filter.TimeSlots != null)
+            {
+                //query = query.Where(p => p.TimeTable.Overlap(filter.TimeSlots) >= 0.9);
+                foreach (var professional in professionals.ToList())
+                {
+                    if (professional.TimeTable.Overlap(filter.TimeSlots) < 0.9)
+                    {
+                        professionals.Remove(professional);
+                    }
+                }
+            }
+
+            return professionals;
+
             // TODO: Add pagination
             // TODO: Add sorting
-
-            // Execute the query and return the results
-            return await query.ToListAsync();
+            
         }
 
     }

@@ -7,9 +7,9 @@ namespace Granp.DTOs
     public class SearchFilterRequest
     {
         public Profession? Profession { get; set; }
-        public List<TimeSlotRequest> TimeSlots { get; set; }
+        public List<TimeSlotRequest>? TimeSlots { get; set; }
         public double? MaxHourlyRate { get; set; }
-        public List<Gender?> Genders { get; set; }
+        public List<Gender>? Genders { get; set; }
         public bool? LongTimeJob { get; set; }
         public bool? ShortTimeJob { get; set; }
         public float? MinRating { get; set; }

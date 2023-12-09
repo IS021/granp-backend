@@ -22,7 +22,7 @@ namespace Granp.Models.Types
 
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-            return R * c; // in metres
+            return (R * c) / 1000; // in kilometres
         }
     }
 }
