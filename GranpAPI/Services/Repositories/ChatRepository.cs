@@ -16,5 +16,10 @@ namespace Granp.Services.Repositories
         {
             return await _collection.Find(x => x.Members.Contains(memberId)).ToListAsync();
         }
+
+        public async Task<Chat?> GetByMembers(List<Guid> members)
+        {
+            return await _collection.Find(x => x.Members == members).FirstOrDefaultAsync();
+        }
     }
 }

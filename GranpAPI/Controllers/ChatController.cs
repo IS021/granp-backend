@@ -31,7 +31,7 @@ namespace Granp.Controllers
             // If the user id is null, return bad request
             if (userId == null)
             {
-                return BadRequest();
+                return BadRequest("User Id is null");
             }
 
             // Use extension method to get the user profile
@@ -40,7 +40,7 @@ namespace Granp.Controllers
             // If the user profile is null, return bad request
             if (customer == null)
             {
-                return BadRequest();
+                return BadRequest("Customer is null");
             }
 
             // Get the professional profile from the database
@@ -49,24 +49,35 @@ namespace Granp.Controllers
             // If the professional profile is not in the database, return bad request
             if (professional == null)
             {
-                return BadRequest();
+                return BadRequest("Professional is null");
             }
 
-            // Create a new chat
-            var chat = new Chat();
+            var members = new List<Guid> { customer.Id, professional.Id };
 
-            // Add the members to the chat
-            chat.Members.Add(customer.Id);
-            chat.Members.Add(professional.Id);
+            // Check if the chat already exists
+            var existingChat = await _unitOfWork.Chats.GetByMembers(members);
 
-            // Add the chat to the database
-            await _unitOfWork.Chats.Add(chat);
+            // If the chat already exists, return chat id
+            if (existingChat != null)
+            {
+                return Ok(existingChat.Id);
+            } else {
+                // Create a new chat
+                var chat = new Chat();
 
-            // Save the changes to the database
-            await _unitOfWork.CompleteAsync();
+                // Add the members to the chat
+                chat.Members.Add(customer.Id);
+                chat.Members.Add(professional.Id);
 
-            // Return the chat id
-            return Ok(chat.Id);
+                // Add the chat to the database
+                await _unitOfWork.Chats.Add(chat);
+
+                // Save the changes to the database
+                await _unitOfWork.CompleteAsync();
+
+                // Return the chat id
+                return Ok(chat.Id);
+            }
         }
 
         // Get chat list
@@ -144,6 +155,7 @@ namespace Granp.Controllers
                 var chatInfo = new ChatInfoResponse
                 {
                     Id = chat.Id,
+                    ProfileId = otherUser.Id,
                     ProfilePicture = otherUser.ProfilePicture,
                     Name = otherUser.FirstName + " " + otherUser.LastName,
                     LastMessage = lastMessage.Content,

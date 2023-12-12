@@ -3,6 +3,7 @@ namespace Granp.DTOs
     public class ChatInfoResponse
     {
         public Guid Id { get; set; }
+        public Guid? ProfileId { get; set; }
         public string? ProfilePicture { get; set; }
         public string Name { get; set; } = null!;
         public string LastMessage { get; set; } = null!;

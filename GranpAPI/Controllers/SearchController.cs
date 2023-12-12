@@ -59,9 +59,9 @@ namespace Granp.Controllers
             return Ok(professionalPublicResponses);
         }
 
-        [HttpGet("info/{id}"), Authorize(Roles = "Customer")]
+        [HttpGet("professional/{id}"), Authorize(Roles = "Customer")]
         // Get professional's info by id
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> GetProfessionalInfo(Guid id)
         {
             // Get User Id from the authentication token
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -91,10 +91,48 @@ namespace Granp.Controllers
             }
 
             // Map the professional to a professional profile response
-            var professionalProfileResponse = _mapper.Map<ProfessionalProfileResponse>(professional);
+            var professionalProfileResponse = _mapper.Map<ProfessionalPublicResponse>(professional);
 
             // Return the professional profile response
             return Ok(professionalProfileResponse);
+        }
+
+        [HttpGet("/customer/{id}"), Authorize(Roles = "Professional")]
+        // Get customer's info by id
+        public async Task<IActionResult> GetCustomerInfo(Guid id)
+        {
+            // Get User Id from the authentication token
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // If the user id is null, return bad request
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+
+            // Get the professional profile from the database
+            var professional = await _unitOfWork.Professionals.GetByUserId(userId);
+
+            // If the professional profile is not in the database, return bad request
+            if (professional == null)
+            {
+                return BadRequest();
+            }
+
+            // Get the customer profile from the database
+            var customer = await _unitOfWork.Customers.GetById(id);
+
+            // If the customer profile is not in the database, return bad request
+            if (customer == null)
+            {
+                return BadRequest();
+            }
+
+            // Map the customer to a customer profile response
+            var customerProfileResponse = _mapper.Map<CustomerPublicResponse>(customer);
+
+            // Return the customer profile response
+            return Ok(customerProfileResponse);
         }
 
     }
