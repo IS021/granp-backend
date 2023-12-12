@@ -5,6 +5,7 @@ namespace Granp.DTOs
 {
     public class CustomerProfileResponse
     {
+        public Guid Id { get; set; }
         public bool IsElder { get; set; }
 
         public string FirstName { get; set; } = null!;

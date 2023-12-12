@@ -5,6 +5,7 @@ namespace Granp.DTOs
 {
     public class ProfessionalProfileResponse
     {
+        public Guid Id { get; set; }
         // User Info
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;

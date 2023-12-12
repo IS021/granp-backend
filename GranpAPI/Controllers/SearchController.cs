@@ -12,7 +12,8 @@ using Granp.DTOs;
 | Method | Path | Description | Roles |
 | ------ | ---- | ----------- | ----- |
 | GET | /search | Search for professionals by filter | Customer |
-| GET | /search/info/{id} | Get professional's info by id | Customer |
+| GET | /search/professional/{id} | Get professional's info by id | Customer |
+| GET | /search/customer/{id} | Get customer's info by id | Professional |
 */
 
 namespace Granp.Controllers
@@ -53,7 +54,7 @@ namespace Granp.Controllers
             var professionals = await _unitOfWork.Professionals.GetByFilter(searchFilter);
 
             // Map the professionals to a list of professional profile responses
-            var professionalPublicResponses = _mapper.Map<List<ProfessionalPublicResponse>>(professionals);
+            var professionalPublicResponses = _mapper.Map<List<ProfessionalPreviewResponse>>(professionals);
 
             // Return the list of professional profile responses
             return Ok(professionalPublicResponses);
@@ -97,7 +98,7 @@ namespace Granp.Controllers
             return Ok(professionalProfileResponse);
         }
 
-        [HttpGet("/customer/{id}"), Authorize(Roles = "Professional")]
+        [HttpGet("customer/{id}"), Authorize(Roles = "Professional")]
         // Get customer's info by id
         public async Task<IActionResult> GetCustomerInfo(Guid id)
         {
