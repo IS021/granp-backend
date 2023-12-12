@@ -35,14 +35,14 @@ namespace Granp.Services.Repositories
                 query = query.Where(p => p.HourlyRate <= filter.MaxHourlyRate.Value);
             }
 
-            if (filter.LongTimeJob.HasValue)
+            if (filter.LongTimeJob.HasValue && filter.LongTimeJob.Value)
             {
-                query = query.Where(p => p.LongTimeJob == filter.LongTimeJob.Value);
+                query = query.Where(p => p.LongTimeJob == true);
             }
 
-            if (filter.ShortTimeJob.HasValue)
+            if (filter.ShortTimeJob.HasValue && filter.ShortTimeJob.Value)
             {
-                query = query.Where(p => p.ShortTimeJob == filter.ShortTimeJob.Value);
+                query = query.Where(p => p.ShortTimeJob == true);
             }
 
             if (filter.MinRating.HasValue)
@@ -52,12 +52,15 @@ namespace Granp.Services.Repositories
 
             if (filter.MinAge.HasValue)
             {
-                query = query.Where(p => p.Age >= filter.MinAge.Value);
+                query = query.Where(p => p.BirthDate.Year <= DateTime.Now.Year - filter.MinAge.Value);
             }
+
+            // DateTime.Now.Year - BirthDate.Year >= filter.MinAge.Value
+            // BirthDate.Year <= DateTime.Now.Year - filter.MinAge.Value
 
             if (filter.MaxAge.HasValue)
             {
-                query = query.Where(p => p.Age <= filter.MaxAge.Value);
+                query = query.Where(p => p.BirthDate.Year >= DateTime.Now.Year - filter.MaxAge.Value);
             }
 
             // Execute query and return the results

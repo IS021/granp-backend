@@ -10,6 +10,7 @@ namespace Granp.DTOs
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string? ProfilePicture { get; set; }
+        public string? Description { get; set; }
         
         // Profile Info
         public Profession Profession { get; set; }

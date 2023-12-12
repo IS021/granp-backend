@@ -27,5 +27,7 @@ namespace Granp.DTOs
         public int MaxDistance { get; set; }
         public bool LongTimeJob { get; set; }
         public bool ShortTimeJob { get; set; }
+
+        public TimeTableResponse TimeTable { get; set; } = null!;
     }
 }
