@@ -28,5 +28,6 @@ namespace Granp.DTOs
         public bool ShortTimeJob { get; set; }
 
         public TimeTableResponse TimeTable { get; set; } = null!;
+        public ICollection<ReservationPublicResponse>? Reservations { get; set; }
     }
 }

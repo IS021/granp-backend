@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
             HeaderNames.ContentType,
             HeaderNames.Authorization,
         })*/
-        .WithMethods("GET", "POST", "PUT", "DELETE")
+        .AllowAnyMethod()
         .SetPreflightMaxAge(TimeSpan.FromSeconds(86400));
     });
 });
@@ -146,6 +146,8 @@ var app = builder.Build();
 app.MapHub<ChatHub>("/chathub");
 app.MapControllers();
 
+app.UseWebSockets();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -159,7 +161,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseErrorHandler();
-app.UseSecureHeaders();
+// app.UseSecureHeaders();
 app.UseCors();
 
 app.UseAuthentication();

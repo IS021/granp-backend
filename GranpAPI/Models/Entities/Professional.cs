@@ -28,6 +28,7 @@ namespace Granp.Models.Entities
         
         // Job Info
         public TimeTable TimeTable { get; set; } = new TimeTable();
+        public ICollection<Reservation>? Reservations { get; set; }
         public double HourlyRate { get; set; }
         public int MaxDistance { get; set; }
         public bool LongTimeJob { get; set; }

@@ -17,6 +17,7 @@ namespace Granp.DTOs.Mappers
                         dest.CustomerId = (Guid) ctx.Items["CustomerId"];
                     });
             CreateMap<Reservation, ReservationResponse>();
+            CreateMap<Reservation, ReservationPublicResponse>();
         }
     }
 }
