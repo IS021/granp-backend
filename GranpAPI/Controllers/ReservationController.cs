@@ -13,9 +13,9 @@ using Granp.DTOs;
 /*
 | Method | Path | Description | Roles |
 | ------ | ---- | ----------- | ----- |
-| POST | /reservations/request | Request a reservation to a Professional | Customer |
-| DELETE | /reservations/cancel/{id} | Cancel a reservation | All |
-| GET | /reservations/get-all | Get all user reservations using authentication token as a filter | All |
+| POST | /reservations/request | Create a reservation | Customer |
+| DELETE | /reservations/cancel/{id} | Cancel a reservation | Customer, Professional |
+| GET | /reservations/get-all | Get all user reservations | Customer, Professional |
 | POST | /reservations/accept/{id} | Accept a reservation | Professional |
 | POST | /reservations/decline/{id} | Decline a reservation | Professional |
 */

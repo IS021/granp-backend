@@ -10,6 +10,16 @@ using Granp.Services.SignalR;
 using Granp.DTOs;
 using Microsoft.AspNetCore.SignalR;
 
+/*
+| Method | Path | Description | Roles |
+| ------ | ---- | ----------- | ----- |
+| POST | /chat/create | Create chat | Customer |
+| GET | /chat/list | Get chat list | Customer, Professional |
+| GET | /chat/messages/{chatId} | Get chat messages | Customer, Professional |
+| POST | /chat/send | Send message | Customer, Professional |
+| POST | /chat/read/{chatId} | Mark messages as read | Customer, Professional |
+*/
+
 namespace Granp.Controllers
 {
     [ApiController, Route("chat")]
